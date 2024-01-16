@@ -363,7 +363,7 @@ def test_save(format, engine, basic_chart):
 
 # Only test inline=False as altair_viewer is required for inline=True
 # but that package has not yet been released with support for Altair 5
-@pytest.mark.parametrize("inline", [False])
+@pytest.mark.parametrize("inline", [False, True])
 def test_save_html(basic_chart, inline):
     out = io.StringIO()
     basic_chart.save(out, format="html", inline=inline)
@@ -378,6 +378,10 @@ def test_save_html(basic_chart, inline):
         assert 'src="https://cdn.jsdelivr.net/npm/vega@5' in content
         assert 'src="https://cdn.jsdelivr.net/npm/vega-lite@5' in content
         assert 'src="https://cdn.jsdelivr.net/npm/vega-embed@6' in content
+
+    with tempfile.TemporaryDirectory() as tdir:
+        basic_chart.save(tdir + "/res.html", format="html", inline=inline)
+
 
 
 def test_to_url(basic_chart):
